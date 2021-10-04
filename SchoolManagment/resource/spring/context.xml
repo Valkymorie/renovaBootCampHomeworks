@@ -1,0 +1,54 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+	<!-- Ogrenci tekrar olarak yeni sekilde olusabilecegi icin scope prototype ve her olusan ogrenci default olarak 1. yıldan baslar -->
+	<!-- Ogrenciler dersleri set halinde tutar, cünkü bir dersi tekrardan alamazlar ve durum belirtmek icin boolean deger alirlar -->
+	<bean id="student" class="com.renova.spring.domain.Student"
+		scope="prototype">
+		<property name="name" value=""></property>
+		<property name="studentId">
+			<value>0</value>
+		</property>
+		<property name="year">
+			<value>1</value>
+		</property>
+		<property name="work">
+			<value>false</value>
+		</property>
+		<property name="lessons">
+			<set>
+
+			</set>
+		</property>
+	</bean>
+
+	<!-- Ogretmenler ad ve verdikleri dersi kullanici tarafından alirlar  -->
+	<bean id="teacher" class="com.renova.spring.domain.Teacher"
+		scope="prototype">
+		<property name="name" value=""></property>
+		<property name="lecture" value=""></property>
+	</bean>
+
+	<!-- Okul muduru ogrencilerin ve ogretmenlerin listesini tutar  okulun baslayip bitmesi durumu mudur ustunden yonetilir -->
+	<bean id="headMaster" class="com.renova.spring.domain.HeadMaster"
+		scope="singleton" init-method="initHeadMaster"
+		destroy-method="disposeHeadMaster">
+		<property name="name" value=""></property>
+		<property name="studentList">
+			<list>
+
+			</list>
+		</property>
+		<property name="teacherList">
+			<list>
+
+			</list>
+		</property>
+
+	</bean>
+
+
+</beans>
