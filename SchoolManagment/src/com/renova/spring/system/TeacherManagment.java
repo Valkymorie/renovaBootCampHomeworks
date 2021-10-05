@@ -9,9 +9,9 @@ public class TeacherManagment extends Teacher implements AcademicStaff {  // OGR
 	public void teachLesson(boolean work) { 
 
 		if (work) {
-			System.out.println("OGRENCILER ZATEN DERSTE");
+			System.out.println("OGRENCI ZATEN DERSTE");
 		} else {
-			System.out.println("OGRENCILER DERSE GIRDI");
+			System.out.println("OGRENCI DERSE GIRDI");
 			work = true;
 		}
 	}

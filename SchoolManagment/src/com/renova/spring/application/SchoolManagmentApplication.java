@@ -1,6 +1,7 @@
 package com.renova.spring.application;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,6 +13,7 @@ import com.renova.spring.domain.HeadMaster;
 import com.renova.spring.domain.Student;
 import com.renova.spring.domain.Teacher;
 import com.renova.spring.system.HeadMasterManagment;
+import com.renova.spring.system.TeacherManagment;
 
 /*
  * Bu projedenin amacý okul içerisinde öðrenci, ögretmen adýna durum ve nicelik yönetim sistemidir.
@@ -19,7 +21,6 @@ import com.renova.spring.system.HeadMasterManagment;
  * Okul içerisinde öðrenciler derste veya tenefüste olabilirler, öðretmenler de öðrencilere ödev verip öðrencileri derse sokabilir.
  * Okul içerisindeki sistemi sonlandýrmak okulu kapatýlmasýna yol açar, okulu açýlýþý için okulda kesinlikle müdüre ihtiyaç vardýr.
  * */
-
 
 public class SchoolManagmentApplication {
 
@@ -45,15 +46,16 @@ public class SchoolManagmentApplication {
 
 		while (input != 0) {
 			System.out.println("0. CIKIS\n" + "1. OGRENCI EKLE\n" + "2. OGRENCI SEC\n" + "3. OGRENCI SIL\n"
-					+ "4. OGRETMEN EKLE\n" + "5. OGRETMEN LISTELE\n" + "6. OGRETMEN SIL");
+					+ "4. OGRETMEN EKLE\n" + "5. OGRETMEN LISTELE\n" + "6. OGRETMEN SIL\n"
+					+ "7. OGRENCILERI DERSE BASLAT\n" + "8. OGRENCILERE ODEV VER");
 			input = scan.nextInt();
 
 			switch (input) {
 			case 0:
-				context.registerShutdownHook();  //OKULU KAPATMAN ICIN CONTEXT DE KAPATILIR
+				context.registerShutdownHook(); // OKULU KAPATMAN ICIN CONTEXT DE KAPATILIR
 				break;
 			case 1:
-				addStudent(); 
+				addStudent();
 				break;
 			case 2:
 				chooseStudent();
@@ -70,6 +72,12 @@ public class SchoolManagmentApplication {
 			case 6:
 				deleteTeacher();
 				break;
+			case 7:
+				studentsToWork();
+				break;
+			case 8:
+				giveHomeWork();
+				break;
 			default:
 				System.out.println("Listedeki sayilardan birini giriniz...");
 			}
@@ -78,7 +86,32 @@ public class SchoolManagmentApplication {
 
 	}
 
-	private static void deleteTeacher() {  //OGRETMENIN ADINI LISTEDEN ARAYIP VAR ISE SILINME ISLEMI YAPILIR
+	private static void giveHomeWork() { // OGRETMEN SAYISI KADAR ODEV TEST AMACLI
+		TeacherManagment teacherManagment = context.getBean("teacherManagment", TeacherManagment.class);
+		// galiba bean ile managment yapýlýsýný dogru durust buralarda kullanmaya
+		// baslayabildim
+		if (teacherIndex == 0) {
+			System.out.println("Odev verecek ogretmen yok");
+		} else {
+			teacherManagment.giveHomeWork(teacherIndex);
+		}
+
+	}
+
+	private static void studentsToWork() { // OLUSMUS OGRENCILERIN HEPSININ WORK DURUMU CALISIYORA CEVIRILMEKTEDIR
+		TeacherManagment teacherManagment = context.getBean("teacherManagment", TeacherManagment.class);
+		if (studentList.size() == 0) {
+			System.out.println("DERSE GIRECEK OGRENCI YOK");
+		} else {
+			for (int i = 0; i < studentList.size(); i++) {
+				teacherManagment.teachLesson(studentList.get(i).isWork());
+				studentList.get(i).setWork(true);
+			}
+		}
+
+	}
+
+	private static void deleteTeacher() { // OGRETMENIN ADINI LISTEDEN ARAYIP VAR ISE SILINME ISLEMI YAPILIR
 
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Ogretmen ismi giriniz");
@@ -96,10 +129,11 @@ public class SchoolManagmentApplication {
 			}
 		}
 
-		teacherIndex--;  //YENIDEN EKLENECEK OGRETMENIN INDEXI EKSRA FAZLA OLMAMASI ICIN BURADA AZALTILMISTIR
+		teacherIndex--; // YENIDEN EKLENECEK OGRETMENIN INDEXI EKSRA FAZLA OLMAMASI ICIN BURADA
+						// AZALTILMISTIR
 	}
 
-	private static void chooseTeacher() { //LISTEDEKI OGRETMENLER GOSTERILIR
+	private static void chooseTeacher() { // LISTEDEKI OGRETMENLER GOSTERILIR
 
 		System.out.println("Kayitli Ogretmenler: ");
 		for (int i = 0; i < teacherList.size(); i++) {
@@ -121,7 +155,7 @@ public class SchoolManagmentApplication {
 		teacherIndex++;
 	}
 
-	private static void deleteStudent() { //OGRENCI NUMARASI GIRILEREK OGRENCI LISTEDEN SILINIR
+	private static void deleteStudent() { // OGRENCI NUMARASI GIRILEREK OGRENCI LISTEDEN SILINIR
 
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Ogrenci numarsini giriniz: ");
@@ -134,10 +168,11 @@ public class SchoolManagmentApplication {
 			studentList.remove(number);
 		}
 
-		studentId--;  //OGRENCI NUMARASI SILINEN OGRENCI KADAR AZALTILIR
+		studentId--; // OGRENCI NUMARASI SILINEN OGRENCI KADAR AZALTILIR
 	}
 
-	private static void chooseStudent() { //OGRENCI NUMARASI GIRILEREK LISTEDEN OGRENCIYE AIT BILGILER EKRANDA GOSTERILIR
+	private static void chooseStudent() { // OGRENCI NUMARASI GIRILEREK LISTEDEN OGRENCIYE AIT BILGILER EKRANDA
+											// GOSTERILIR
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Ogrenci numarsini giriniz: ");
 		int number = scan.nextInt();
@@ -155,6 +190,73 @@ public class SchoolManagmentApplication {
 			} else {
 				System.out.println("Ogrenci su anda derste degil.");
 			}
+		}
+
+		int input = 1;
+
+		while (input != 0) {
+
+			System.out.println("0. Ana Menu\n" + "1. Ders ekle\n" + "2. Ders cikar");
+			input = scan.nextInt();
+			switch (input) {
+			case 0:
+				break;
+			case 1:
+				addLesson(number);
+				break;
+			case 2:
+				removeLesson(number);
+				break;
+			default:
+				System.out.println("Listedeki seceneklerden birini giriniz.");
+			}
+
+		}
+
+	}
+
+	private static void removeLesson(int number) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Ders ismini giriniz");
+		String input = scan.nextLine();
+
+		int control = 0;
+
+		if (studentList.get(number).getLessons().size() == 0) {
+			System.out.println("Ogrenci hicbir derse kayitli degil");
+		} else {
+			for (int i = 0; i < studentList.get(number).getLessons().size(); i++) {
+				Iterator<String> iterator = studentList.get(number).getLessons().iterator();
+				while (iterator.hasNext()) {
+					if (input.equals(iterator.next())) {
+						iterator.remove();
+						// studentList.get(number).getLessons().remove(iterator.next());
+						System.out.println(input + " adli ders silinmistir");
+						control++;
+						break;
+					}
+				}
+				if (control != 0) {
+					break;
+				}
+			}
+		}
+
+	}
+
+	private static void addLesson(int number) {
+
+		Scanner scan = new Scanner(System.in);
+
+		int i = 1;
+		while (true) {
+			System.out.println("Alacagi " + i + ". dersi giriniz: (durmak icin 0 yaziniz)");
+			String input = scan.nextLine();
+			if (input.equals("0")) {
+				break;
+			}
+			studentList.get(number).getLessons().add(input.toLowerCase());
+			i++;
 		}
 
 	}

@@ -10,10 +10,9 @@ public class StudentManagment {
 
 	}
 
-	public void removeLesson(Student student, int index) { // OGRENCININ DERS LISTESINDEN DERS SILMEK ICIN METHOD
+	public void removeLesson() {
+	}  // OGRENCININ DERS LISTESINDEN DERS SILMEK ICIN METHOD
 
-		student.getLessons().remove(index);
-
-	}
+	
 
 }

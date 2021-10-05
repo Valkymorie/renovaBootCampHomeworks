@@ -49,6 +49,12 @@
 		</property>
 
 	</bean>
+	
+	<bean id="teacherManagment" class="com.renova.spring.system.TeacherManagment" scope="singleton" ></bean>
+	
+	<bean id="studentManagment" class="com.renova.spring.system.StudentManagment" scope="singleton" ></bean>
+	
+	<bean id="headMasterManagment" class="com.renova.spring.system.HeadMasterManagment" scope="singleton" ></bean>
 
 
 </beans>
