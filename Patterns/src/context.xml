@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:annotation-config />
+	<context:component-scan
+		base-package="com.renova.patterns.observer" />
+	<context:component-scan
+		base-package="com.renova.patterns.facade" />
+
+	<bean name="ogrenci" class="com.renova.patterns.facade.Ogrenci"
+		scope="singleton">
+		<property name="fenOdev"
+			value="kana kırmızı rengini veren madde nedir?"></property>
+		<property name="matematikOdev" value="5+5 nedir?"></property>
+		<property name="turkceOdev" value="sessiz harfler nelerdir?"></property>
+		<property name="muzikOdev" value="kac farkli nota vardir?"></property>
+	</bean>
+
+
+	<!--  KOD ILE OLUSAN BEAN ICIN KONFIGURASYON BU KULLANILIRKEN DIGER 2 BEAN KULLANILMAMAKTADIR
+	<bean name="ogrenciFactoryBean"  
+		class="com.renova.patterns.builder.OgrenciFactoryBean"></bean>
+	-->
+	
+	<bean id="ogrenciBuilder"
+		class="com.renova.patterns.builder.Ogrenci$Builder">
+		<property name="ad" value="emir"></property>
+		<property name="soyAd" value="ALAY"></property>
+		<property name="numara" value="1"></property>
+		<property name="sinif" value="freshman"></property>
+		<property name="okul" value="KOU"></property>
+	</bean>
+
+	<bean id="ogrenciBuild" class="com.renova.patterns.builder.Ogrenci" factory-bean="ogrenciBuilder"
+		factory-method="build"></bean>
+
+</beans>
