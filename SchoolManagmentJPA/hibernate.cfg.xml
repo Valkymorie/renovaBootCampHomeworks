@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/egitimdb</property>
+		<property name="hibernate.connection.username">egitim</property>
+		<property name="hibernate.connection.password">admin</property>  <!-- SIFREYI KENDI DB SIFRENIZE GORE DEGISTIRINIZ -->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="show_sql">false</property>
+		<property name="hbm2ddl.auto">validate</property>
+		
+		<mapping class="com.egitim.schoolManagmentJPA.model.data.Mudur"/>
+		<mapping class="com.egitim.schoolManagmentJPA.model.data.Ogrenci"/>
+		<mapping class="com.egitim.schoolManagmentJPA.model.data.Ogretmen"/>
+		<mapping class="com.egitim.schoolManagmentJPA.model.data.Okul"/>
+		
+	</session-factory>
+	
+</hibernate-configuration>
